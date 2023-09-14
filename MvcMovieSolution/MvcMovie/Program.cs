@@ -1,15 +1,21 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using MvcMovie.Data;
 using MvcMovie.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<MvcMovieContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("MvcMovieContext") ?? throw new InvalidOperationException("Connection string 'MvcMovieContext' not found.")));
-
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// I ENCOUNTRER AN ERROR HERE WHEN I LAUNCH WITH (kestrel) MVCMOVIE PROFILE BUT NOT WITH IIS EXPRESS
+// USE IIS EXPRESS AND FIND OUT LATER WHAT'S GOING ON
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")
+        ));
+
+//builder.Services.AddDbContext<MvcMovieContext>(options =>
+//    options.UseSqlServer(builder.Configuration.GetConnectionString("MvcMovieContext") ?? throw new InvalidOperationException("Connection string 'MvcMovieContext' not found.")));
+
 
 var app = builder.Build();
 
